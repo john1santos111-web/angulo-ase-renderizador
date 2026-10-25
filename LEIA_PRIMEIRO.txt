@@ -1,0 +1,12 @@
+ÂNGULO ASE — RENDERIZADOR DE DOCUMENTOS (KIT DE IMPLANTAÇÃO)
+
+1. Este pacote NÃO altera o endpoint atual RunPod vLLM Qwen3-14B.
+2. Requer servidor Linux com Docker Compose, acesso SSH e domínio/subdomínio HTTPS.
+3. Copie .env.example para .env e configure ASE_API_KEY com a chave de autenticação já usada pela integração ASE no Gestão. Não exponha .env publicamente.
+4. No servidor, dentro desta pasta, execute: docker compose up -d --build
+5. A porta 8080 fica acessível APENAS localmente (127.0.0.1). Configure um proxy reverso HTTPS autenticado no domínio próprio para encaminhar POST /render a 127.0.0.1:8080.
+6. No Gestão, configure ase_render_endpoint com https://SEU_SUBDOMINIO/render (ou variável ASE_RENDER_ENDPOINT). O código V29 usa a chave ASE já configurada.
+7. Teste com documento público de teste, nunca com dados reais inicialmente. Confirme primeira página A4, autenticação, URL, e mídia no WhatsApp.
+8. O serviço exige CPU e não precisa de GPU; não é necessário modificar a imagem registry.runpod.net/runpod-workers-worker-vllm-main-dockerfile:84a6b5e8f.
+
+IMPORTANTE: Não instalar na public_html. Não colocar a chave no ZIP. Este kit NÃO foi publicado em VPS/RunPod, pois não há acesso remoto autenticado nesta sessão. O Chromium executa --no-sandbox no Docker: mantenha rede e endpoint restritos, sem expor a porta diretamente. O renderizador deve ser testado e endurecido antes de documentos sensíveis.
