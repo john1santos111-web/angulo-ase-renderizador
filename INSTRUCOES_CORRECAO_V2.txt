@@ -1,0 +1,9 @@
+CORREÇÃO V2
+1. Substitua SOMENTE handler.py na raiz do repositório GitHub.
+2. Aguarde GitHub Actions verde.
+3. No GHCR copie a tag SHA COMPLETA da nova publicação.
+4. No RunPod implante nova versão usando essa tag completa.
+5. Configure ASE_API_KEY nas variáveis do RunPod (chave secreta).
+6. Teste com {"input":{"api_key":"SUA_CHAVE","html":"<html><body><h1>TESTE ANGULO ASE</h1></body></html>"}}
+7. Verifique output.ok e image_base64.
+A correção resolve a verificação de assinatura PNG. O motivo dos FAILED anteriores não pode ser afirmado sem output/error da execução.
