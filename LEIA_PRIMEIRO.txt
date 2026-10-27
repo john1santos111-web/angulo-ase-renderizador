@@ -1,0 +1,1 @@
+PACOTE COMPLETO CORRIGIDO: envie TODOS os arquivos e a pasta oculta .github para a RAIZ do repositorio, sem a pasta externa. Confira README.md. Depois verifique Actions e atualize a imagem no RunPod somente apos o build verde.
