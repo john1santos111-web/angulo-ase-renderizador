@@ -1,1 +1,5 @@
 PACOTE COMPLETO CORRIGIDO: envie TODOS os arquivos e a pasta oculta .github para a RAIZ do repositorio, sem a pasta externa. Confira README.md. Depois verifique Actions e atualize a imagem no RunPod somente apos o build verde.
+
+V5: Corrigido erro Chromium Failed to create headless user data directory container.
+Publicar arquivos na raiz do GitHub mantendo .github/workflows/docker-publish.yml.
+Aguardar Actions verde e atualizar a imagem do RunPod.

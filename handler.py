@@ -29,6 +29,10 @@ def validate_url(url):
 def render(url=None, html=None):
     with tempfile.TemporaryDirectory() as directory:
         work = Path(directory)
+        profile = work / "chromium-profile"
+        profile.mkdir(mode=0o700)
+        cache = work / "cache"
+        cache.mkdir(mode=0o700)
         pdf = work / "documento.pdf"
         prefix = work / "pagina"
         if html is not None:
@@ -41,12 +45,16 @@ def render(url=None, html=None):
             target = validate_url(url)
         command = [
             "chromium", "--headless", "--no-sandbox", "--disable-gpu",
+            f"--user-data-dir={profile}",
             "--disable-dev-shm-usage", "--no-first-run", "--disable-extensions",
             "--disable-background-networking", "--no-pdf-header-footer",
             "--virtual-time-budget=2500", f"--print-to-pdf={pdf}", target
         ]
         try:
-            subprocess.run(command, check=True, timeout=50, capture_output=True)
+            env = os.environ.copy()
+            env.update({"HOME": str(work), "XDG_CONFIG_HOME": str(work),
+                        "XDG_CACHE_HOME": str(cache), "TMPDIR": str(work)})
+            subprocess.run(command, check=True, timeout=50, capture_output=True, env=env)
         except subprocess.CalledProcessError as exc:
             details = (exc.stderr or b"").decode("utf-8", "replace")[-500:]
             raise RuntimeError("Chromium falhou: " + details) from exc
