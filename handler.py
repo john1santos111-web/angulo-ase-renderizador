@@ -73,13 +73,8 @@ def handler(job):
     payload = job.get("input", {})
     if not isinstance(payload, dict):
         return {"ok": False, "error": "input deve ser um objeto"}
-    api_key = get_api_key()
-    if not api_key.strip() or api_key.strip().startswith("{{") or api_key.strip().startswith("${"):
-        print("ASE_CONFIG_ERROR: ASE_API_KEY ausente ou referência de segredo não resolvida", flush=True)
-        return {"ok": False, "error": "ASE_API_KEY não configurada corretamente no RunPod"}
-    supplied = payload.get("api_key", "")
-    if not isinstance(supplied, str) or not hmac.compare_digest(supplied, api_key):
-        return {"ok": False, "error": "Não autorizado"}
+    # RunPod queue endpoints validate the Bearer token before dispatching a job.
+    # Do not demand a second shared secret in the job input.
     if payload.get("format", "a4-first-page") != "a4-first-page":
         return {"ok": False, "error": "Formato não suportado"}
     if ("url" in payload) == ("html" in payload):
@@ -96,5 +91,4 @@ def handler(job):
 
 if __name__ == "__main__":
     print("ANGULO_ASE_SERVERLESS_HANDLER_V2 iniciado", flush=True)
-    print("ASE_CONFIG_STATUS:", "presente" if get_api_key() and not get_api_key().strip().startswith(("{{", "${")) else "ausente_ou_nao_resolvido", flush=True)
     runpod.serverless.start({"handler": handler})
